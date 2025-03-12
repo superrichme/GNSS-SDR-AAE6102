@@ -37,4 +37,26 @@ Optimize loop bandwidth and damping ratio to balance noise suppression and dynam
 
 ### Result
 * Open-sky
-![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task1.png)
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task2_1.png)
+
+### Results analysis
+#### (a) PRN 16
+Correlation output shows stable filtered DLL at 6000-8000, with raw discriminator and filtered PLL fluctuating. Raw DLL amplitude has noise, but filtered DLL stabilizes at 0.2-0.4, indicating effective noise reduction. PRN 16 tracking remains stable, with filtered discriminators maintaining lock well.
+
+#### (b) PRN 26
+Filtered DLL correlation stays stable at 6000-8000, raw discriminator varies more. Filtered PLL tracks closely with slight deviations. Raw DLL amplitude fluctuates (±0.5), filtered DLL stabilizes at 0.2-0.3, showing good noise suppression. PRN 26 tracking matches PRN 16, with effective signal stabilization.
+
+#### (c) PRN 31
+Filtered DLL correlation baseline is lower at 4000-6000 compared to PRN 16 and 26. Raw discriminator and filtered PLL oscillate more. Raw DLL amplitude varies (±0.6), filtered DLL stabilizes at 0.1-0.3 with drops. PRN 31 tracking appears less stable, but filtered DLL performs reasonably.
+
+#### (d) PRN 22
+Filtered DLL correlation stays at 5000-7000, raw discriminator shows spikes. Filtered PLL tracks smoothly with some divergence. Raw DLL amplitude fluctuates (±0.5), filtered DLL stabilizes at 0.2-0.4 with dips. PRN 22 tracking remains moderately stable, with filtering mitigating noise effectively.
+
+#### (e) PRN 27
+Filtered DLL correlation holds at 4000-6000, similar to PRN 31. Raw discriminator and filtered PLL vary notably. Raw DLL amplitude fluctuates (±0.6), filtered DLL stabilizes at 0.1-0.3 with end instability. PRN 27 tracking ranks least stable, but filtering offers some improvement.
+
+SoftGNSS performs well in Open-sky scenario, with PRN 16 and 26 showing top stability and signal strength. Filtering (PLL and DLL) reduces noise and stabilizes outputs. PRN 31, 22, and 27 show weaker performance due to signal or environmental issues, but the system maintains lock.
+
+### Result
+* Open-sky
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task2_1.png)
