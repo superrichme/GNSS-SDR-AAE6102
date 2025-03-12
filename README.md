@@ -79,3 +79,21 @@ Purpose: Obtains a sufficient bit sequence (30 seconds, 5 subframes) to ensure c
 ### Step 2: Reshape and Sum Samples for Bit Estimation
 Principle: Reshapes samples into a 20-row matrix (each row of 20 samples = 1 bit), sums columns to estimate bits. Summing enhances signal robustness by reducing noise.
 Purpose: Integrates multiple samples (20) into a single bit value, improving decoding reliability.
+
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task3.png)
+A comparison of navigation message decoding results between open sky and urban datasets reveals that the open sky data maintains a stable bit amplitude of ±5000, with continuous signals and minimal fluctuations, attributed to a high signal-to-noise ratio (SNR), absence of multipath interference, and stable tracking (Filtered PLL/DLL ±50/±5), ensuring reliable decoding. In contrast, the urban data exhibits significant amplitude variations (±5×10⁴) with frequent drops (e.g., at 30s, 50s, 70s), due to multipath effects, signal blockages reducing SNR, and unstable tracking (PRN 18 Filtered PLL/DLL ±150/±6), leading to decoding interruptions and increased noise. These differences highlight the urban environment's challenges to signal integrity, impacting tracking and decoding stability. 
+
+### Step 3: Thresholding to Binary Bits
+Principle: Applies a threshold (greater than $`0 = 1, ≤ 0 = 0`$) to convert summed values to binary bits (0 or 1).
+Purpose: Transforms continuous values into discrete binary format, matching navigation message structure.
+
+### Step 4: Convert to Binary String Format
+Principle: Uses `dec2bin` to transform binary array into a string array (containing only "0" and "1" characters), matching ephemeris function input.
+Purpose: Adapts input format for the decoding function, ensuring accurate processing.
+
+### Step 5: Decode Ephemeris and TOW
+Principle: `ephemeris` parses 1500 bits (5 subframes) to extract ephemeris parameters (e.g., 
+,e) and TOW from Subframe 1. `navBitsBin(2:1501)` provides data, `navBitsBin(1)` aids validation.
+Purpose: Generates ephemeris structure (`eph`) and TOW for subsequent positioning.
+
+In summary, the decoding process in `postNavigation.m` starts by extracting navigation bit samples, reshapes and sums them, thresholds to binary, converts to string format, decodes ephemeris and TOW using `ephemeris`, and validates data integrity, providing reliable input for positioning.
