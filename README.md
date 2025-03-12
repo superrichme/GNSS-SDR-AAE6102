@@ -69,3 +69,13 @@ These phenomena result from urban multipath effects and signal obstructions, whi
 ### Comparison with Open-Sky Results
 Urban tracking underperforms compared to open-sky results, where PRN 16 and 26 maintained stable 6000-8000 correlations with minimal noise due to unobstructed signals. Urban multipath and obstructions cause wider amplitude fluctuations and inconsistent correlations (5000-15000), reducing filtering effectiveness. Open-sky’s clear line-of-sight contrasts with urban challenges, explaining the reliability gap. The fundamental reason for the difference lies in the unobstructed line-of-sight signal propagation in open-sky environments, while urban multipath and blockages disrupt signal integrity.
 
+Task 3 – Navigation data decoding
+Decode the navigation message and extract key parameters, such as ephemeris data, for at least one satellite.
+-------------------
+### Step 1: Extract Navigation Bit Samples
+Principle: Extracts 1500 bit samples (covering 5 subframes, each 300 bits, 1 bit = 20 samples) from trackResults.I_P. subFrameStart defines the subframe start, with an extra 20 samples for alignment.
+Purpose: Obtains a sufficient bit sequence (30 seconds, 5 subframes) to ensure complete navigation data.
+
+### Step 2: Reshape and Sum Samples for Bit Estimation
+Principle: Reshapes samples into a 20-row matrix (each row of 20 samples = 1 bit), sums columns to estimate bits. Summing enhances signal robustness by reducing noise.
+Purpose: Integrates multiple samples (20) into a single bit value, improving decoding reliability.
