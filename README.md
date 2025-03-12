@@ -1,4 +1,4 @@
-# AAE6102-Assignment1
+AAE6102-Assignment1
 ================
 Task 1 – Acquisition 
 Process the IF data using a GNSS SDR and generate initial acquisition outputs. 
