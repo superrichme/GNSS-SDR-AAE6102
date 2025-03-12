@@ -15,3 +15,6 @@ Step 3: Fine Acquisition
 For each detected PRN, generate a 10-ms C/A code sequence (longCaCode), remove code modulation from signal0DC using the coarse code phase to get the carrier component (xCarrier). Perform high-resolution FFT (8x nearest power of 2) on xCarrier, compute frequency bins (fftFreqBins), and estimate precise carrier frequency (acqResults.carrFreq) based on the maximum magnitude. Retain the coarse code phase (acqResults.codePhase) as the final estimate. 
 
 The core of the algorithm is to efficiently search all possible code phases and frequency offsets using frequency-domain correlation, enhancing reliability with peak ratio analysis, and outputting the carrier frequency and code phase for each PRN.
+
+Result
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task1_opensky.jpg?raw=true)
