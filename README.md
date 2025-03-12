@@ -1,8 +1,8 @@
 # AAE6102-Assignment1
-
-Task 1 – Acquisition 
+================
+##Task 1 – Acquisition 
 Process the IF data using a GNSS SDR and generate initial acquisition outputs. 
-
+---------------
 This algorithm in SoftGNSS is a cold-start acquisition method for GPS signals based on frequency-domain correlation, utilizing a three-step approach consisting of initialization, coarse and fine acquisition stages.
 
 Step 1: Initialization
