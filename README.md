@@ -17,4 +17,4 @@ For each detected PRN, generate a 10-ms C/A code sequence (longCaCode), remove c
 The core of the algorithm is to efficiently search all possible code phases and frequency offsets using frequency-domain correlation, enhancing reliability with peak ratio analysis, and outputting the carrier frequency and code phase for each PRN.
 
 Result
-![image]([https://github.com/superrichme/yiweixu.github.io/blob/main/task1_opensky.jpg?raw=true](https://github.com/superrichme/yiweixu.github.io/blob/main/task1.png))
+![image]([https://github.com/superrichme/yiweixu.github.io/blob/main/task1_opensky.jpg?raw=true](https://github.com/superrichme/yiweixu.github.io/blob/main/task1.png)
