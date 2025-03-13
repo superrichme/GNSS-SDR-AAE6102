@@ -97,3 +97,60 @@ Principle: `ephemeris` parses 1500 bits (5 subframes) to extract ephemeris param
 Purpose: Generates ephemeris structure (`eph`) and TOW for subsequent positioning.
 
 In summary, the decoding process in `postNavigation.m` starts by extracting navigation bit samples, reshapes and sums them, thresholds to binary, converts to string format, decodes ephemeris and TOW using `ephemeris`, and validates data integrity, providing reliable input for positioning.
+
+### Results
+* Open-sky
+| Ephemeris data | PRN-16       | PRN-22       | PRN-26       | PRN-31       | Meaning                            |
+|----------------|--------------|--------------|--------------|--------------|------------------------------------|
+| C_ic           | -1.0058e-07  | -1.0058e-07  | -2.0489e-08  | -1.1362e-07  | Cosine-harmonic-correction-to-inclination (rad) |
+| omega_0        | -1.6743      | 1.2727       | -1.8129      | -2.7873      | Right ascension at reference time (rad) |
+| C_is           | 1.3597e-07   | -9.3132e-08  | 8.9407e-08   | -5.0291e-08  | Sine-harmonic-correction-to-inclination (rad) |
+| i_0            | 0.9716       | 0.9365       | 0.9399       | 0.9559       | Inclination at reference time (rad) |
+| C_rc           | 237.6875     | 266.3438     | 234.1875     | 240.1563     | Cosine-harmonic-correction-to-orbit-radius (m) |
+| omega          | 0.6796       | -0.8879      | 0.2957       | 0.3116       | Argument of perigee (rad)         |
+| omegaDot       | -8.0128e-09  | -8.6686e-09  | -8.3114e-09  | -7.9950e-09  | Rate of right ascension (rad/s)   |
+| IODE_sf3       | 9            | 22           | 113          | 83           | Issue of Data, Ephemeris (Subframe 3) |
+| IDot           | -4.8931e-10  | -3.0358e-11  | -4.1752e-10  | -3.2144e-11  | Rate of inclination (rad/s)       |
+| WeekNumber     | 1155         | 1155         | 1155         | 1155         | GPS-week number                   |
+| T_GD           | -1.0245e-08 | -1.7695e-08  |6.9849e-09  | -1.3039e-08 | Satellite clock correction (s)    |
+| IODC           | 234          | 218          | 15           | 228          | Issue of Data, Clock              |
+| t_oc           | 396000       | 396000       | 396000       | 396000       | Clock reference time (s)          |
+| a_f1           | -6.3665e-12  | 9.2086e-12  | 3.9790e-12  | -1.9327e-12  | Clock drift linear term (s/s)     |
+| a_f0           | -4.0693e-04  | -4.8947e-04  | 1.4479e-04  | -1.4490e-04  | Clock bias (s)                    |
+| IODE_sf2       | 9            | 22           | 113          | 83           | Issue of Data, Ephemeris (Subframe 2) |
+| C_rs           | 23.3438      | -99.8125     | 21.2500      | 30.7188      | Sine harmonic correction to orbit radius (m) |
+| delta_n        | 4.2466e-09   | 5.2831e-09   | 5.0513e-09   | 4.8073e-09   | Mean motion correction (rad/s)    |
+| M_0            | 0.7181       | -1.2610      | 1.7356       | 2.8245       | Mean anomaly at reference time (rad) |
+| C_uc           | 1.3895e-06   | -5.1558e-06  | 1.1530e-06   | 1.4603e-06   | Cosine-harmonic-correction-to-latitude (rad) |
+| e              | 0.0123       | 0.0067       | 0.0063       | 0.0103       | Eccentricity                      |
+| C_us           | 7.6871e-06   | 5.1651e-06   | 7.0408e-06   | 7.2289e-06   | Sine-harmonic-correction-to-latitude (rad) |
+| sqrt_A          | 5.1538e+03   | 5.1537e+03   | 5.1536e+03   | 5.1536e+03   | Square-root-of-semi-major-axis (m^(1/2)) |
+| t_oe           | 396000       | 396000       | 396000       | 396000       | Ephemeris reference time (s)       |
+
+* Urban
+| Ephemeris data | PRN-1       | PRN-3       | PRN-11      | PRN-18      | Meaning                            |
+|----------------|-------------|-------------|-------------|-------------|------------------------------------|
+| C_ic           | -7.4506e-08 | 1.1176e-08  | -3.1665e-07 | 2.5332e-07  | Cosine-harmonic-correction-to-inclination (rad) |
+| omega_0        | -3.1060     | -2.0642     | 2.7258      | 3.1218      | Right ascension at reference time (rad) |
+| C_is           | 1.6019e-07  | 5.2154e-08  | -1.3225e-07 | 3.5390e-08  | Sine-harmonic-correction-to-inclination (rad) |
+| i_0            | 0.9761      | 0.9629      | 0.9008      | 0.9546      | Inclination at reference time (rad) |
+| C_rc           | 287.4688    | 160.3125    | 324.4063    | 280.1563    | Cosine-harmonic-correction-to-orbit-radius (m) |
+| omega          | 0.7115      | 0.5950      | 1.8915      | 1.3930      | Argument of perigee (rad)         |
+| omegaDot       | -8.1696e-09 | -7.8325e-09 | -9.3043e-09 | -8.6107e-09 | Rate of right ascension (rad/s)   |
+| IODE_sf3       | 72          | 72          | 83          | 56          | Issue of Data, Ephemeris (Subframe 3) |
+| IDot           | -1.8108e-10 | 4.8109e-10  | -1.2858e-11 | -1.6179e-10 | Rate of inclination (rad/s)       |
+| weekNumber     | 1032        | 1032        | 1032        | 1032        | GPS-week number                   |
+| T_GD           | 5.5879e-09  | 1.8626e-09  | -1.2573e-08 | 5.5879e-09  | Satellite clock correction (s)    |
+| IODC           | 12          | 4           | 229         | 244         | Issue of Data, Clock              |
+| t_oc           | 453600      | 453600      | 453600      | 453600      | Clock reference time (s)          |
+| a_f1           | -9.4360-12 | -1.1369e-12 | 8.5265e-12  | 3.1832e-12  | Clock drift linear term (s/s)     |
+| a_f0           | -1.2087     | 1.8633e-04  | -5.9009e-04 | 9.8655e-05  | Clock bias (s)                    |
+| IODE_sf2       | 72          | 72          | 83          | 56          | Issue of Data, Ephemeris (Subframe 2) |
+| C_rs           | -120.7188   | -62.0938    | -67.1250    | -113.8750   | Sine-harmonic-correction-to-orbit-radius (m) |
+| Ephemeris data | PRN-1       | PRN-3       | PRN-11      | PRN-18      | Meaning                            |
+| M_0            | 0.5179      | -0.4304     | -0.1989     | 0.2598      | Mean anomaly at reference time (rad) |
+| C_uc           | 8.6149e-06  | 3.9066e-06  | 3.6042e-06  | 6.1095e-06  | Cosine-harmonic-correction-to-latitude (rad) |
+| e              | 0.0089      | 0.0022      | 0.0166      | 0.0154      | Eccentricity                      |
+| C_us           | 5.3031e-06  | 3.9066e-06  | 1.5123e-06  | 5.1148e-06  | Sine-harmonic-correction-to-latitude (rad) |
+| sqrtA          | 5153.7e+03  | 5153.8e+03  | 5153.7e+03  | 5153.7e+03  | Square-root-of-semi-major-axis (m^(1/2)) |
+| t_oe           | 453600      | 453600      | 453600      | 453600      | Ephemeris reference time (s)       |
