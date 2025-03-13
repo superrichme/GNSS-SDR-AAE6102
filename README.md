@@ -228,6 +228,14 @@ if ~isempty(doppler) && ~isempty(satvelocity)
 end
 ...
 ```
+### Results
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task4_2.png)
+
+### Result analysis
+
+The velocity estimation through Weighted Least Squares (WLS) in the UTM system plots reveals horizontal velocity errors over time across two scenarios: OpenSky (left) and Urban (right). In the OpenSky scenario, errors fluctuate between -50 m/s and +50 m/s, which reflects stable satellite visibility and minimal multipath effects, ensuring consistent WLS performance. Conversely, the Urban scenario displays larger errors, spanning from -500 m/s to +500 m/s, with notable peaks after 70 seconds. Obstructed satellite signals, multipath interference, and a reduced number of visible satellites in urban canyons likely cause this, diminishing the accuracy of the WLS solution. The WLS weighting, often based on elevation angles, faces challenges in Urban environments where low-elevation satellites prevail, thus amplifying errors. Moreover, signal reflections in urban areas introduce biases into Doppler measurements, which further affect velocity estimates. The OpenSky scenario, with its superior geometry and signal quality, yields lower errors.
+
+
 Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
 -------------------
