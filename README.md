@@ -208,7 +208,26 @@ This indicates a relatively stable performance with errors significantly lower t
 ### Velocity estimation
 For velocity, pseudorange rates $`\dot{\rho}`$ derived from Doppler measurements are used: $`\dot{\rho} = -\mathbf{v}_{\text{sat}} \cdot \mathbf{u} + \mathbf{v}_{\text{rec}} \cdot \mathbf{u} + \epsilon_v`$, where $`\mathbf{v}_{\text{sat}}`$ and $`\mathbf{v}_{\text{rec}}`$ are satellite and receiver velocities, and $`\mathbf{u}`$ is the line-of-sight vector. The velocity $`\mathbf{v}_{\text{rec}} = [v_x, v_y, v_z]^T`$ is solved via $`\mathbf{v}_{\text{rec}} = (A_v^T W_v A_v)^{-1} A_v^T W_v \mathbf{b}_v`$, with $`A_v`$ as the velocity design matrix and $`W_v`$ mirroring $`W`$. Weights enhance accuracy by prioritizing high-quality observations.
 
+```matlab
+...
+vel = zeros(3, 1); 
+if ~isempty(doppler) && ~isempty(satvelocity)
+       lamda = settings.c / 1575.42e6;
+       rate = -lamda * doppler; 
+       rate = rate'; 
+       satvelocity = satvelocity'; 
+       b = zeros(nmbOfSatellites, 1); 
+       Wv = zeros(nmbOfSatellites, nmbOfSatellites); 
+       for i = 1:nmbOfSatellites
+               b(i) = rate(i) - satvelocity(i, :) * (A(i, 1:3))';
+               Wv(i, i) = max(0.1, sin(el(i) * dtr)^2);
+    end
 
+       A_v = A(:, 1:3);     
+       vel = (A_v' * Wv * A_v) \ (A_v' * Wv * b);
+end
+...
+```
 Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
 -------------------
