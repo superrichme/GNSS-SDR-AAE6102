@@ -92,8 +92,8 @@ Principle: Uses `dec2bin` to transform binary array into a string array (contain
 Purpose: Adapts input format for the decoding function, ensuring accurate processing.
 
 ### Step 5: Decode Ephemeris and TOW
-Principle: `ephemeris` parses 1500 bits (5 subframes) to extract ephemeris parameters (e.g., 
-,e) and TOW from Subframe 1. `navBitsBin(2:1501)` provides data, `navBitsBin(1)` aids validation.
+Principle: `ephemeris` parses 1500 bits (5 subframes) to extract ephemeris parameters (`e.g., 
+,e`) and TOW from Subframe 1. `navBitsBin(2:1501)` provides data, `navBitsBin(1)` aids validation.
 Purpose: Generates ephemeris structure (`eph`) and TOW for subsequent positioning.
 
 In summary, the decoding process in `postNavigation.m` starts by extracting navigation bit samples, reshapes and sums them, thresholds to binary, converts to string format, decodes ephemeris and TOW using `ephemeris`, and validates data integrity, providing reliable input for positioning.
