@@ -148,8 +148,7 @@ In summary, the decoding process in `postNavigation.m` starts by extracting navi
 | a_f1           | -9.4360-12 | -1.1369e-12 | 8.5265e-12  | 3.1832e-12  | Clock drift linear term (s/s)     |
 | a_f0           | -1.2087     | 1.8633e-04  | -5.9009e-04 | 9.8655e-05  | Clock bias (s)                    |
 | IODE_sf2       | 72          | 72          | 83          | 56          | Issue of Data, Ephemeris (Subframe 2) |
-| C_rs           | -120.7188   | -62.0938    | -67.1250    | -113.8750   | Sine-harmonic-correction-to-orbit-radius (m) |
-| Ephemeris data | PRN-1       | PRN-3       | PRN-11      | PRN-18      | Meaning                            |
+| C_rs           | -120.7188   | -62.0938    | -67.1250    | -113.8750   | Sine-harmonic-correction-to-orbit-radius (m) | 
 | M_0            | 0.5179      | -0.4304     | -0.1989     | 0.2598      | Mean anomaly at reference time (rad) |
 | C_uc           | 8.6149e-06  | 3.9066e-06  | 3.6042e-06  | 6.1095e-06  | Cosine-harmonic-correction-to-latitude (rad) |
 | e              | 0.0089      | 0.0022      | 0.0166      | 0.0154      | Eccentricity                      |
