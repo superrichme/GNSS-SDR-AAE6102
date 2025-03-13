@@ -18,7 +18,7 @@ The core of the algorithm is to efficiently search all possible code phases and 
 
 ### Result
 
-![image](https://github.com/superrichme/GNSS-SDR-AAE6102/blob/main/task1.png)
+![image](https://github.com/superrichme/GNSS-SDR-AAE6102/blob/main/task1.png?raw=true)
 
 This figure displays the acquisition results for both the Open-sky dataset and the Urban dataset. For the Open-sky dataset, satellites 16, 22, 26, 27, and 31 were successfully acquired. Meanwhile, the Urban dataset yielded successful acquisitions for satellites 1, 3, 11, and 18.
 
