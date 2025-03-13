@@ -20,7 +20,7 @@ The core of the algorithm is to efficiently search all possible code phases and 
 
 ![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task1.png)
 
-Fig. 1 displays the acquisition results for both the Open-sky dataset and the Urban dataset. For the Open-sky dataset, satellites 16, 22, 26, 27, and 31 were successfully acquired. Meanwhile, the Urban dataset yielded successful acquisitions for satellites 1, 3, 11, and 18.
+This figure displays the acquisition results for both the Open-sky dataset and the Urban dataset. For the Open-sky dataset, satellites 16, 22, 26, 27, and 31 were successfully acquired. Meanwhile, the Urban dataset yielded successful acquisitions for satellites 1, 3, 11, and 18.
 
 
 Task 2 – Tracking.    
@@ -57,11 +57,11 @@ Filtered DLL correlation holds at 4000-6000, similar to PRN 31. Raw discriminato
 
 SoftGNSS performs well in Open-sky scenario, with PRN 16 and 26 showing top stability and signal strength. Filtering (PLL and DLL) reduces noise and stabilizes outputs. PRN 31, 22, and 27 show weaker performance due to signal or environmental issues, but the system maintains lock.
 
-### Result
+### Results
 * Urban
 ![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task2_2.png)
 
-### Results analysis
+### Result analysis
 The tracking results for PRN 1, 3, 11, and 18 in the urban SoftGNSS dataset illustrate a stable filtered DLL baseline, though correlation strength varies across PRNs. The raw PLL and DLL discriminators exhibit significant noise, while filtering stabilizes outputs to some extent. Inconsistent correlation and occasional signal instability occur, particularly toward the end.
 
 These phenomena result from urban multipath effects and signal obstructions, which weaken satellite signals and introduce noise. Lower correlation baselines (e.g., PRN 1 and 11) stem from signal attenuation by buildings, while higher values (e.g., PRN 3 and 18) reflect better visibility. Intermittent signal loss arises from blockages and reflections.
@@ -160,7 +160,7 @@ Using the pseudorange measurements obtained from tracking, implement the Weighte
 ---------------------------------
 The weighted least squares (WLS) method for computing receiver position and velocity in this GNSS algorithm minimizes the weighted residuals between observed and predicted measurements, accounting for varying observation quality. For position, pseudorange observations $`\rho_{\text{obs}}`$ are modeled as $`\rho_{\text{obs}} = \|\mathbf{r}_{\text{sat}} - \mathbf{r}_{\text{rec}}\| + c \cdot dt + \epsilon`$, where $`\mathbf{r}_{\text{sat}}`$ and $`\mathbf{r}_{\text{rec}}`$ are satellite and receiver positions, $`dt`$ is clock bias, and $`\epsilon`$ is noise. The WLS solution iteratively updates the state $`\mathbf{x} = [x, y, z, dt]^T`$ by solving $`\mathbf{x} = (A^T W A)^{-1} A^T W \mathbf{b}`$, where $`A`$ is the geometry matrix, $`W`$ is a diagonal weight matrix (e.g., $`W_{ii} = \sin^2(\text{el}_i)`$), and $`\mathbf{b}`$ is the residual vector.
 
-For velocity, pseudorange rates $`\dot{\rho}`$ derived from Doppler measurements are used: $`\dot{\rho} = -\mathbf{v}_{\text{sat}} \cdot \mathbf{u} + \mathbf{v}_{\text{rec}} \cdot \mathbf{u} + \epsilon_v`$, where $`\mathbf{v}_{\text{sat}}`$ and $`\mathbf{v}_{\text{rec}}`$ are satellite and receiver velocities, and $`\mathbf{u}`$ is the line-of-sight vector. The velocity $`\mathbf{v}_{\text{rec}} = [v_x, v_y, v_z]^T`$ is solved via $`\mathbf{v}_{\text{rec}} = (A_v^T W_v A_v)^{-1} A_v^T W_v \mathbf{b}_v`$, with $`A_v`$ as the velocity design matrix and $`W_v`$ mirroring $`W`$. Weights enhance accuracy by prioritizing high-quality observations (e.g., higher elevation satellites).
+For velocity, pseudorange rates $`\dot{\rho}`$ derived from Doppler measurements are used: $`\dot{\rho} = -\mathbf{v}_{\text{sat}} \cdot \mathbf{u} + \mathbf{v}_{\text{rec}} \cdot \mathbf{u} + \epsilon_v`$, where $`\mathbf{v}_{\text{sat}}`$ and $`\mathbf{v}_{\text{rec}}`$ are satellite and receiver velocities, and $`\mathbf{u}`$ is the line-of-sight vector. The velocity $`\mathbf{v}_{\text{rec}} = [v_x, v_y, v_z]^T`$ is solved via $`\mathbf{v}_{\text{rec}} = (A_v^T W_v A_v)^{-1} A_v^T W_v \mathbf{b}_v`$, with $`A_v`$ as the velocity design matrix and $`W_v`$ mirroring $`W`$. Weights enhance accuracy by prioritizing high-quality observations.
 
 ```matlab
 ......
@@ -195,7 +195,17 @@ for iter = 1:nmbOfIterations
 end
 pos = pos';
 ......
-```![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task3.png)
+```
+### Results
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task4.png)
+
+### Result analysis
+
+The left figure depicts the positioning variations in the East, North, and Up directions over 160 seconds in Open-Sky scenario. The variations fluctuate between approximately -50 m and +40 m, with most deviations within ±30 m across all components. In an OpenSky environment, the absence of reflective surfaces minimizes multipath effects, reducing phase estimation errors in the DLL and PLL loops. The WLS method benefits from stronger satellite signals and better geometry, as obstructions are minimal. Additionally, atmospheric delays are more predictable and easier to correct in open areas. The consistent SNR across satellites ensures more balanced weights in WLS, leading to errors that are more reasonable—likely within ±30 m as shown—compared to the urban case. This aligns with expectations, as Open-Sky scenarios typically yield higher accuracy and reliability in GNSS positioning. 
+
+This indicates a relatively stable performance with errors significantly lower than the urban scenario, where errors reached 100 m within the first 80 seconds before failing due to multipath-induced loss of lock. As shown in right figure, in urban environments, the WLS positioning achieves ENU errors within 100 meters for the first 80 seconds, but fails after ring-road loss of lock. This is primarily due to the traditional DLL and PLL lacking multipath suppression. Multipath effects, prevalent in cities with reflective surfaces, introduce phase estimation errors, destabilizing the PLL and causing loss of lock after 80 seconds. Without multipath mitigation, such as correlator-based techniques or advanced filtering, the pseudorange and Doppler measurements degrade, amplifying residuals in the WLS solution and leading to divergence. 
+
+
 
 Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
