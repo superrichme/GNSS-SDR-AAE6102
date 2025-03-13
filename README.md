@@ -1,6 +1,6 @@
 AAE6102-Assignment1
 ================
-Task 1 – Acquisition 
+Task 1 – Acquisition.  
 Process the IF data using a GNSS SDR and generate initial acquisition outputs. 
 ---------------
 This algorithm in SoftGNSS is a cold-start acquisition method for GPS signals based on frequency-domain correlation, utilizing a three-step approach consisting of initialization, coarse and fine acquisition stages.
@@ -23,7 +23,7 @@ The core of the algorithm is to efficiently search all possible code phases and 
 Fig. 1 displays the acquisition results for both the Open-sky dataset and the Urban dataset. For the Open-sky dataset, satellites 16, 22, 26, 27, and 31 were successfully acquired. Meanwhile, the Urban dataset yielded successful acquisitions for satellites 1, 3, 11, and 18.
 
 
-Task 2 – Tracking
+Task 2 – Tracking.    
 Adapt the tracking loop (DLL) to produce correlation plots and analyze the tracking performance. Discuss the impact of urban interference on the correlation peaks. (Multiple correlators must be implemented for plotting the correlation function)
 ---------------
 ### Step 1: Tracking Process and Components
@@ -69,7 +69,7 @@ These phenomena result from urban multipath effects and signal obstructions, whi
 ### Comparison with Open-Sky Results
 Urban tracking underperforms compared to open-sky results, where PRN 16 and 26 maintained stable 6000-8000 correlations with minimal noise due to unobstructed signals. Urban multipath and obstructions cause wider amplitude fluctuations and inconsistent correlations (5000-15000), reducing filtering effectiveness. Open-sky’s clear line-of-sight contrasts with urban challenges, explaining the reliability gap. The fundamental reason for the difference lies in the unobstructed line-of-sight signal propagation in open-sky environments, while urban multipath and blockages disrupt signal integrity.
 
-Task 3 – Navigation data decoding
+Task 3 – Navigation data decoding.    
 Decode the navigation message and extract key parameters, such as ephemeris data, for at least one satellite.
 -------------------
 ### Step 1: Extract Navigation Bit Samples
@@ -155,10 +155,49 @@ In summary, the decoding process in `postNavigation.m` starts by extracting navi
 | sqrtA          | 5153.7e+03  | 5153.8e+03  | 5153.7e+03  | 5153.7e+03  | Square-root-of-semi-major-axis (m^(1/2)) |
 | t_oe           | 453600      | 453600      | 453600      | 453600      | Ephemeris reference time (s)       |
 
-### Task 4 – Position and velocity estimation
+Task 4 – Position and velocity estimation.    
 Using the pseudorange measurements obtained from tracking, implement the Weighted Least Squares (WLS) algorithm to compute user’s position and velocity. Plot the user position and velocity, compare it to the provided ground truth values, and comment on the impact of multipath effects on the WLS solution.
+---------------------------------
+The weighted least squares (WLS) method for computing receiver position and velocity in this GNSS algorithm minimizes the weighted residuals between observed and predicted measurements, accounting for varying observation quality. For position, pseudorange observations $`\rho_{\text{obs}}`$ are modeled as $`\rho_{\text{obs}} = \|\mathbf{r}_{\text{sat}} - \mathbf{r}_{\text{rec}}\| + c \cdot dt + \epsilon`$, where $`\mathbf{r}_{\text{sat}}`$ and $`\mathbf{r}_{\text{rec}}`$ are satellite and receiver positions, $`dt`$ is clock bias, and $`\epsilon`$ is noise. The WLS solution iteratively updates the state $`\mathbf{x} = [x, y, z, dt]^T`$ by solving $`\mathbf{x} = (A^T W A)^{-1} A^T W \mathbf{b}`$, where $`A`$ is the geometry matrix, $`W`$ is a diagonal weight matrix (e.g., $`W_{ii} = \sin^2(\text{el}_i)`$), and $`\mathbf{b}`$ is the residual vector.
+
+For velocity, pseudorange rates $`\dot{\rho}`$ derived from Doppler measurements are used: $`\dot{\rho} = -\mathbf{v}_{\text{sat}} \cdot \mathbf{u} + \mathbf{v}_{\text{rec}} \cdot \mathbf{u} + \epsilon_v`$, where $`\mathbf{v}_{\text{sat}}`$ and $`\mathbf{v}_{\text{rec}}`$ are satellite and receiver velocities, and $`\mathbf{u}`$ is the line-of-sight vector. The velocity $`\mathbf{v}_{\text{rec}} = [v_x, v_y, v_z]^T`$ is solved via $`\mathbf{v}_{\text{rec}} = (A_v^T W_v A_v)^{-1} A_v^T W_v \mathbf{b}_v`$, with $`A_v`$ as the velocity design matrix and $`W_v`$ mirroring $`W`$. Weights enhance accuracy by prioritizing high-quality observations (e.g., higher elevation satellites).
+
+```matlab
+......
+for iter = 1:nmbOfIterations
+    W = zeros(nmbOfSatellites, x`nmbOfSatellites); 
+    for i = 1:nmbOfSatellites
+        if iter == 1
+            Rot_X = X(:, i);
+            trop = 2;
+            el(i) = 0;
+            W(i, i) = 1; 
+        else
+            rho2 = (X(1, i) - pos(1))^2 + (X(2, i) - pos(2))^2 + (X(3, i) - pos(3))^2;
+            traveltime = sqrt(rho2) / settings.c;
+            Rot_X = e_r_corr(traveltime, X(:, i)); 
+            [az(i), el(i), dist] = topocent(pos(1:3, :), Rot_X - pos(1:3, :)); 
+            W(i, i) = max(0.1, sin(el(i) * dtr)^2); 
+            if (settings.useTropCorr == 1)
+                trop = tropo(sin(el(i) * dtr), 0.0, 1013.0, 293.0, 50.0, 0.0, 0.0, 0.0);
+            else
+                trop = 0;
+            end
+        end
+        omc(i) = (obs(i) - norm(Rot_X - pos(1:3), 'fro') - pos(4) - trop);
+        A(i, :) = [ (-(Rot_X(1) - pos(1))) / obs(i) ...
+                    (-(Rot_X(2) - pos(2))) / obs(i) ...
+                    (-(Rot_X(3) - pos(3))) / obs(i) ...
+                    1 ];
+    end
+    x = (A' * W * A) \ (A' * W * omc);
+    pos = pos + x; 
+end
+pos = pos';
+......
+```
 
 
-
-### Task 5 – Kalman filter-based positioning
+Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
+-------------------
