@@ -72,6 +72,11 @@ These phenomena result from urban multipath effects and signal obstructions, whi
 ### Comparison with Open-Sky Results
 Urban tracking underperforms compared to open-sky results, where PRN 16 and 26 maintained stable 6000-8000 correlations with minimal noise due to unobstructed signals. Urban multipath and obstructions cause wider amplitude fluctuations and inconsistent correlations (5000-15000), reducing filtering effectiveness. Open-sky’s clear line-of-sight contrasts with urban challenges, explaining the reliability gap. The fundamental reason for the difference lies in the unobstructed line-of-sight signal propagation in open-sky environments, while urban multipath and blockages disrupt signal integrity.
 
+### Multi-correlator results
+![image](https://github.com/superrichme/GNSS-SDR-AAE6102/blob/main/task2_3.png?raw=true)
+
+In Open-sky, the ACF peaks sharply at 3500 and exhibits a narrow, symmetric shape, which indicates minimal multipath interference and ensures precise code delay estimation. In contrast, the Urban scenario reveals a lower peak at 11000, with a broader and less symmetric ACF, which reflects significant multipath effects caused by signal reflections in urban environments. The reduced peak amplitude and distorted shape in the Urban setting underscore challenges in code synchronization, which lead to degraded positioning accuracy compared to the Open-sky scenario.
+
 Task 3 – Navigation data decoding.    
 Decode the navigation message and extract key parameters, such as ephemeris data, for at least one satellite.
 -------------------
@@ -242,3 +247,31 @@ The velocity estimation through Weighted Least Squares (WLS) in the UTM system p
 Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
 -------------------
+
+```matlab
+...
+ z = [obs'; doppler_rate];
+    x_pred = F * x; 
+    P_pred = F * P * F' + Q; 
+    H = zeros(2 * nmbOfSatellites, 8); % Jacobian matrix
+    h = zeros(2 * nmbOfSatellites, 1); % Predicted measurements
+    for i = 1:nmbOfSatellites
+        rho = sqrt((X(1, i) - x_pred(1))^2 + (X(2, i) - x_pred(2))^2 + (X(3, i) - x_pred(3))^2);
+        traveltime = rho / settings.c;
+        Rot_X = e_r_corr(traveltime, X(:, i));
+        [az(i), el(i), dist] = topocent(x_pred(1:3), Rot_X - x_pred(1:3));
+        if settings.useTropCorr == 1
+            trop = tropo(sin(el(i) * dtr), 0.0, 1013.0, 293.0, 50.0, 0.0, 0.0, 0.0);
+        else
+            trop = 0;
+        end
+       h(i) = norm(Rot_X - x_pred(1:3)) + x_pred(7) + trop;
+        los = (Rot_X - x_pred(1:3)) / norm(Rot_X - x_pred(1:3)); 
+        h(i + nmbOfSatellites) = los' * (satvelocity(i, :)' - x_pred(4:6)) + x_pred(8);
+        H(i, 1:3) = -(Rot_X - x_pred(1:3))' / norm(Rot_X - x_pred(1:3)); 
+        H(i, 7) = 1; % Partial derivative w.r.t. clock bias
+        H(i + nmbOfSatellites, 4:6) = -los'; 
+        H(i + nmbOfSatellites, 8) = 1; 
+    end
+...
+```
