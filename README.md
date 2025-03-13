@@ -100,6 +100,7 @@ In summary, the decoding process in `postNavigation.m` starts by extracting navi
 
 ### Results
 * Open-sky
+  
 | Ephemeris data | PRN-16       | PRN-22       | PRN-26       | PRN-31       | Meaning                            |
 |----------------|--------------|--------------|--------------|--------------|------------------------------------|
 | C_ic           | -1.0058e-07  | -1.0058e-07  | -2.0489e-08  | -1.1362e-07  | Cosine-harmonic-correction-to-inclination (rad) |
@@ -128,6 +129,7 @@ In summary, the decoding process in `postNavigation.m` starts by extracting navi
 | t_oe           | 396000       | 396000       | 396000       | 396000       | Ephemeris reference time (s)       |
 
 * Urban
+  
 | Ephemeris data | PRN-1       | PRN-3       | PRN-11      | PRN-18      | Meaning                            |
 |----------------|-------------|-------------|-------------|-------------|------------------------------------|
 | C_ic           | -7.4506e-08 | 1.1176e-08  | -3.1665e-07 | 2.5332e-07  | Cosine-harmonic-correction-to-inclination (rad) |
