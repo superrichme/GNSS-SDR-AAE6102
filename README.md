@@ -249,35 +249,61 @@ The velocity estimation through WLS in the UTM system plots highlights the signi
 Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
 -------------------
+
+The Pseudocode of EKF algorithm is as follows.
+
+```matlab
+# Define measurement vector z combining pseudoranges and Doppler rates
+z ← [obs, doppler_rate]
+
+# Predict state and covariance (Time Update)
+x_pred ← F * x  # State prediction using state transition matrix F
+P_pred ← F * P * F^T + Q  # Covariance prediction with process noise Q
+
+# Initialize Jacobian matrix H and predicted measurements h
+H ← zeros(2 * nmbOfSatellites, 8)  # Jacobian matrix for measurements
+h ← zeros(2 * nmbOfSatellites)  # Predicted measurements
+
+# Loop over each satellite to compute predicted measurements and Jacobian
+for i from 1 to nmbOfSatellites do
+    # Compute geometric distance and travel time
+    rho ← sqrt((X[1,i] - x_pred[1])^2 + (X[2,i] - x_pred[2])^2 + (X[3,i] - x_pred[3])^2)
+    traveltime ← rho / c  # c is the speed of light from settings
+
+    # Correct satellite position for Earth rotation
+    Rot_X ← e_r_corr(traveltime, X[:,i])
+
+    # Compute azimuth, elevation, and distance
+    [az[i], el[i], dist] ← topocent(x_pred[1:3], Rot_X - x_pred[1:3])
+
+    # Apply tropospheric correction if enabled
+    if useTropCorr is true then
+        trop ← tropo(sin(el[i] * dtr), 0.0, 1013.0, 293.0, 50.0, 0.0, 0.0, 0.0)
+    else
+        trop ← 0
+    end
+
+    # Predicted pseudorange measurement
+    h[i] ← norm(Rot_X - x_pred[1:3]) + x_pred[7] + trop
+
+    # Compute line-of-sight vector
+    los ← (Rot_X - x_pred[1:3]) / norm(Rot_X - x_pred[1:3])
+
+    # Predicted Doppler measurement (pseudorange rate)
+    h[i + nmbOfSatellites] ← los^T * (satvelocity[i]^T - x_pred[4:6]) + x_pred[8]
+
+    # Jacobian for pseudorange (partial derivatives)
+    H[i, 1:3] ← -(Rot_X - x_pred[1:3])^T / norm(Rot_X - x_pred[1:3])  # w.r.t. position
+    H[i, 7] ← 1  # w.r.t. clock bias
+
+    # Jacobian for Doppler (partial derivatives)
+    H[i + nmbOfSatellites, 4:6] ← -los^T  # w.r.t. velocity
+    H[i + nmbOfSatellites, 8] ← 1  # w.r.t. clock drift
+end
+```
 An Extended Kalman Filter (EKF) is formulated to improve positioning precision by leveraging pseudorange and Doppler measurements. This EKF approach facilitates adaptive filtering and smoothing of both position and velocity estimates, which enhances resilience to measurement noise and signal disruptions. By implementing the EKF, the positioning outcomes are optimized, showcasing its superiority over the WLS method, particularly in demanding environments.
 
-The EKF algorithm is as follows.
-```matlab
-...
- z = [obs'; doppler_rate];
-    x_pred = F * x; 
-    P_pred = F * P * F' + Q; 
-    H = zeros(2 * nmbOfSatellites, 8); % Jacobian matrix
-    h = zeros(2 * nmbOfSatellites, 1); % Predicted measurements
-    for i = 1:nmbOfSatellites
-        rho = sqrt((X(1, i) - x_pred(1))^2 + (X(2, i) - x_pred(2))^2 + (X(3, i) - x_pred(3))^2);
-        traveltime = rho / settings.c;
-        Rot_X = e_r_corr(traveltime, X(:, i));
-        [az(i), el(i), dist] = topocent(x_pred(1:3), Rot_X - x_pred(1:3));
-        if settings.useTropCorr == 1
-            trop = tropo(sin(el(i) * dtr), 0.0, 1013.0, 293.0, 50.0, 0.0, 0.0, 0.0);
-        else
-            trop = 0;
-        end
-       h(i) = norm(Rot_X - x_pred(1:3)) + x_pred(7) + trop;
-        los = (Rot_X - x_pred(1:3)) / norm(Rot_X - x_pred(1:3)); 
-        h(i + nmbOfSatellites) = los' * (satvelocity(i, :)' - x_pred(4:6)) + x_pred(8);
-        H(i, 1:3) = -(Rot_X - x_pred(1:3))' / norm(Rot_X - x_pred(1:3)); 
-        H(i, 7) = 1; % Partial derivative w.r.t. clock bias
-        H(i + nmbOfSatellites, 4:6) = -los'; 
-        H(i + nmbOfSatellites, 8) = 1; 
-    end
-...
-```
 ### EKF Results
-![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task4_2.png)
+![image](https://github.com/superrichme/GNSS-SDR-AAE6102/blob/main/task5_1.png?raw=true)
+
+The position estimation results using Kalman filtering, shown in UTM coordinates, compare Open-sky and Urban scenarios over a measurement period. In the Open-sky scenario, coordinate variations in east, north, and up directions exhibit relatively small fluctuations, indicating stable satellite visibility and consistent positioning accuracy, as reflected in the 3D plot and tight scatter distribution. Conversely, the Urban scenario displays significantly larger variations across all directions, suggesting greater positional uncertainty due to obstructed signals and multipath effects, as seen in the widely scattered 2D plot. The Urban environment demonstrates more pronounced instability compared to the steadier Open-sky results.
