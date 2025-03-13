@@ -18,11 +18,12 @@ The core of the algorithm is to efficiently search all possible code phases and 
 
 ### Result
 
-![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task1.png)
+![image](https://github.com/superrichme/GNSS-SDR-AAE6102/blob/main/task1.png)
 
 This figure displays the acquisition results for both the Open-sky dataset and the Urban dataset. For the Open-sky dataset, satellites 16, 22, 26, 27, and 31 were successfully acquired. Meanwhile, the Urban dataset yielded successful acquisitions for satellites 1, 3, 11, and 18.
 
 ![image](https://github.com/superrichme/GNSS-SDR-AAE6102/blob/main/task1_1.png)
+
 The GNSS-SDR satellite acquisition process is illustrated through frequency and time domain plots for Open-sky and Urban scenarios. In the Open-sky case, the frequency domain plot shows a distinct peak around 0 MHz with a magnitude of approximately 80, indicating a strong Doppler shift detection. The time domain plots for Q and I channels exhibit clear periodic signals with amplitudes around ±2, and the histograms reveal concentrated bins near 0, suggesting low noise and successful acquisition. Conversely, the Urban scenario displays a noisier frequency domain with a weaker peak magnitude of around 60, reflecting signal degradation due to obstructions. The time domain plots for Q and I channels show increased noise with amplitudes fluctuating between ±5, and the histograms exhibit wider distributions, indicating higher variability and multipath effects. These differences highlight the challenges of satellite acquisition in urban environments, where signal interference and blockages degrade GNSS-SDR performance compared to the clearer Open-sky conditions.
 
 Task 2 – Tracking.    
