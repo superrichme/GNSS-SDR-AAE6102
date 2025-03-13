@@ -205,7 +205,7 @@ The left figure depicts the positioning variations in the East, North, and Up di
 
 This indicates a relatively stable performance with errors significantly lower than the urban scenario, where errors reached 100 m within the first 80 seconds before failing due to multipath-induced loss of lock. As shown in right figure, in urban environments, the WLS positioning achieves ENU errors within 100 meters for the first 80 seconds, but fails after ring-road loss of lock. This is primarily due to the traditional DLL and PLL lacking multipath suppression. Multipath effects, prevalent in cities with reflective surfaces, introduce phase estimation errors, destabilizing the PLL and causing loss of lock after 80 seconds. Without multipath mitigation, such as correlator-based techniques or advanced filtering, the pseudorange and Doppler measurements degrade, amplifying residuals in the WLS solution and leading to divergence. 
 
-### velocity estimation
+### Velocity estimation
 For velocity, pseudorange rates $`\dot{\rho}`$ derived from Doppler measurements are used: $`\dot{\rho} = -\mathbf{v}_{\text{sat}} \cdot \mathbf{u} + \mathbf{v}_{\text{rec}} \cdot \mathbf{u} + \epsilon_v`$, where $`\mathbf{v}_{\text{sat}}`$ and $`\mathbf{v}_{\text{rec}}`$ are satellite and receiver velocities, and $`\mathbf{u}`$ is the line-of-sight vector. The velocity $`\mathbf{v}_{\text{rec}} = [v_x, v_y, v_z]^T`$ is solved via $`\mathbf{v}_{\text{rec}} = (A_v^T W_v A_v)^{-1} A_v^T W_v \mathbf{b}_v`$, with $`A_v`$ as the velocity design matrix and $`W_v`$ mirroring $`W`$. Weights enhance accuracy by prioritizing high-quality observations.
 
 
