@@ -204,7 +204,9 @@ end
 pos = pos';
 ......
 ```
-### Results
+### Result comparison
+* Open-sky Ground Truth: (22.328444770087565, 114.1713630049711)
+* Urban Ground Truth: (22.3198722, 114.209101777778)
 ![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task4.png)
 
 ### Result analysis
@@ -239,15 +241,17 @@ end
 ### Results
 ![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task4_2.png)
 
-### Result analysis
+### Effects of Multipath on Weighted Least Squares (WLS) Solutions
 
-The velocity estimation through Weighted Least Squares (WLS) in the UTM system plots reveals horizontal velocity errors over time across two scenarios: OpenSky (left) and Urban (right). In the OpenSky scenario, errors fluctuate between -50 m/s and +50 m/s, which reflects stable satellite visibility and minimal multipath effects, ensuring consistent WLS performance. Conversely, the Urban scenario displays larger errors, spanning from -500 m/s to +500 m/s, with notable peaks after 70 seconds. Obstructed satellite signals, multipath interference, and a reduced number of visible satellites in urban canyons likely cause this, diminishing the accuracy of the WLS solution. The WLS weighting, often based on elevation angles, faces challenges in Urban environments where low-elevation satellites prevail, thus amplifying errors. Moreover, signal reflections in urban areas introduce biases into Doppler measurements, which further affect velocity estimates. The OpenSky scenario, with its superior geometry and signal quality, yields lower errors.
+The velocity estimation through WLS in the UTM system plots highlights the significant impact of multipath effects across two scenarios: OpenSky and Urban. In the OpenSky scenario, errors fluctuate between -50 m/s and +50 m/s, reflecting stable satellite visibility and minimal multipath effects, which ensures consistent WLS performance. The superior geometry and signal quality in this environment yield lower errors. Conversely, the Urban scenario reveals larger errors, spanning from -500 m/s to +500 m/s, with notable peaks after 70 seconds. Multipath interference, caused by signal reflections in urban canyons, introduces biases into Doppler measurements, further degrading velocity estimates. Obstructed satellite signals and a reduced number of visible satellites also diminish the accuracy of the WLS solution. The WLS weighting, typically based on elevation angles, faces challenges in Urban environments where low-elevation satellites dominate, amplifying errors. This underscores the detrimental role of multipath effects in complex urban settings, necessitating advanced mitigation techniques to improve WLS-based velocity estimation.
 
 
 Task 5 – Kalman filter-based positioning.   
 Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
 -------------------
+An Extended Kalman Filter (EKF) is formulated to improve positioning precision by leveraging pseudorange and Doppler measurements. This EKF approach facilitates adaptive filtering and smoothing of both position and velocity estimates, which enhances resilience to measurement noise and signal disruptions. By implementing the EKF, the positioning outcomes are optimized, showcasing its superiority over the WLS method, particularly in demanding environments.
 
+The EKF algorithm is as follows.
 ```matlab
 ...
  z = [obs'; doppler_rate];
@@ -275,3 +279,5 @@ Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measuremen
     end
 ...
 ```
+### EKF Results
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task4_2.png)
