@@ -59,7 +59,7 @@ SoftGNSS performs well in Open-sky scenario, with PRN 16 and 26 showing top stab
 
 ### Results
 * Urban
-![image](task2_2.png)
+![image](https://github.com/superrichme/yiweixu.github.io/blob/main/task2_2.png?raw=true)
 
 ### Result analysis
 The tracking results for PRN 1, 3, 11, and 18 in the urban SoftGNSS dataset illustrate a stable filtered DLL baseline, though correlation strength varies across PRNs. The raw PLL and DLL discriminators exhibit significant noise, while filtering stabilizes outputs to some extent. Inconsistent correlation and occasional signal instability occur, particularly toward the end.
