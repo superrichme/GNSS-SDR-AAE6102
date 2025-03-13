@@ -154,3 +154,11 @@ In summary, the decoding process in `postNavigation.m` starts by extracting navi
 | C_us           | 5.3031e-06  | 3.9066e-06  | 1.5123e-06  | 5.1148e-06  | Sine-harmonic-correction-to-latitude (rad) |
 | sqrtA          | 5153.7e+03  | 5153.8e+03  | 5153.7e+03  | 5153.7e+03  | Square-root-of-semi-major-axis (m^(1/2)) |
 | t_oe           | 453600      | 453600      | 453600      | 453600      | Ephemeris reference time (s)       |
+
+### Task 4 – Position and velocity estimation
+Using the pseudorange measurements obtained from tracking, implement the Weighted Least Squares (WLS) algorithm to compute user’s position and velocity. Plot the user position and velocity, compare it to the provided ground truth values, and comment on the impact of multipath effects on the WLS solution.
+
+
+
+### Task 5 – Kalman filter-based positioning
+Develop an Extended Kalman Filter (EKF) using pseudorange and Doppler measurements to estimate user position and velocity.
